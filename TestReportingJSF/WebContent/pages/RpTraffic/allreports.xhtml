@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:hf="http://highfaces.org"
+                template="/template/template.xhtml"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+           	
+			<ui:define name="pageTitle">welcome</ui:define>	
+						
+			<ui:define name="PageContent">
+		 <f:metadata>
+    <f:viewParam name="rapport_id" value="#{rapport_id}" />
+    
+</f:metadata>
+		 <h:form>
+			
+                <p:remoteCommand name="rc" actionListener="#{rp_gene.createForm}" 
+                                 update=":mainForm" process="@this" autoRun="true" />
+            </h:form>
+
+            <h:form id="mainForm"  binding="#{rp_gene.form}"  >
+            <p:layout style="height:600px;background-color:#FFFFFF;" >
+            <p:layoutUnit position="west" header="Filters" id="filter_layout" >
+            
+            </p:layoutUnit>
+            <p:layoutUnit position="center" styleClass="layoutUnitCenter" id="main_layout" >
+            
+            <c:forEach items="#{rp_gene.linesMap}" var="char" varStatus="loop">
+            
+            <hf:chart type="line" title="#{char.getName()}" >
+            <c:forEach items="#{char.getSeries()}" var="serie" varStatus="loop">
+             <hf:chartSerie name="#{serie.getName()}"  value="#{serie.getMap().entrySet()}" var="point" point="#{point.value}"  tickLabel="#{point.key.toString()}"/>
+  
+            </c:forEach>
+            </hf:chart>
+            
+            </c:forEach>
+             <c:forEach items="#{rp_gene.barsMap}" var="bart" varStatus="loop">
+            
+            <hf:chart type="bar" title="#{bart.getName()}"  >
+            <c:forEach items="#{bart.getSeries()}" var="serie" varStatus="loop">
+            <hf:chartSerie name="#{serie.getName()}"  value="#{serie.getMap().entrySet()}" var="point" point="#{point.value}"  tickLabel="#{point.key.toString()}"/>
+  
+            </c:forEach>
+            </hf:chart>
+            
+            </c:forEach>
+               <c:forEach items="#{rp_gene.piesSeries}" var="piechart" varStatus="loop">
+            
+            <hf:chart type="pie"  >
+             <hf:chartSerie name="Boys" value="#{piechart.entrySet()}" var="point" point="#{point.value}"  tickLabel="#{point.key}"/>
+            </hf:chart>
+       
+            </c:forEach>
+            </p:layoutUnit>
+            
+            
+            </p:layout>
+          <p:commandButton type="button" onclick="rc()" value="Execute" icon="ui-icon-refresh" />
+            </h:form>
+  <p:growl id="growl" showDetail="true" sticky="true" />  
+            
+           
+			</ui:define>
+			</ui:composition>

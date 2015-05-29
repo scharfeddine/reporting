@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head>
+    
+<h:outputScript library="primefaces" name="jquery/jquery.js" />
+<h:outputScript library="primefaces" name="jquery/jquery-plugins.js" />
+
+<h:outputScript name="highcharts.js" library="js" />
+
+
+               
+<title><ui:insert name="pageTitle" /></title>
+	<style>
+	
+	.ui-widget, .ui-widget .ui-widget {
+font-size: 90% !important;
+}
+	
+			.ui-panelgrid td, .ui-panelgrid tr{
+   border-style: none !important;
+}
+
+	
+	</style>
+</h:head> 
+<body > 
+
+			 <p:layout fullPage="true" resizeTitle="resize" style="background-color:#FFFFFF;"  >
+        <p:layoutUnit position="north" size="80"  id="north" header="Elite Business                    Bievenue  #{login_bean.user.UName}"  >
+            <ui:include src="/template/header.xhtml" />
+            
+        </p:layoutUnit>
+
+        <p:layoutUnit position="west" id="west"   header="Menu"  size="225">
+        <h:form id="form">
+            <ui:include src="/template/navigation.xhtml" >
+          
+            </ui:include>
+            </h:form>
+        </p:layoutUnit>
+
+        <p:layoutUnit styleClass="layoutUnitCenter" position="center">
+            
+               
+                <ui:insert name="PageContent"  />
+            
+        </p:layoutUnit>
+          <p:layoutUnit position="south" id="south"  collapsible="true" >
+           <p:themeSwitcher id="basic" style="margin-left:1200px;" >
+		 
+            <f:selectItem itemLabel="Changer Theme" itemValue="" />
+           
+            <f:selectItems value="#{themeSwitcherView.themes}" var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme.name}"/>
+       
+        </p:themeSwitcher>
+   
+        </p:layoutUnit>
+
+     
+    </p:layout>
+</body> 
+</html>

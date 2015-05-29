@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/template.xhtml">
+           	
+			<ui:define name="pageTitle">welcome</ui:define>	
+
+			<ui:define name="PageContent">
+			<h:form id="form1">
+			<h1 style="text-align:center;">Mobile Prépayé-Configuration-Plan Tarifaire</h1>
+			
+		
+			<p:dataTable style="width:300px;" id="singleDT"  rowKey="#{plan1.codePlanTarifaire}" var="plan1" value="#{plan_tarif.list_plans}" selectionMode="single" selection="#{plan_tarif.plan}" >
+    <p:column headerText="Code Plan Tarifaire">
+        <h:outputText value="#{plan1.codePlanTarifaire}" />
+    </p:column>
+ 
+    <p:column headerText="Intitulé Plan Tarifaire">
+        <h:outputText value="#{plan1.planTarifaire}" />
+    </p:column>
+ 
+   <f:facet name="footer">
+   <p:panelGrid columns="2">
+            <p:commandButton  process="singleDT" update=":form1:planDetail"  value="Modifier" oncomplete="PF('dlg4').show()"  />
+             <p:commandButton process="singleDT" icon="ui-icon-plusthick" value="Ajouter" oncomplete="PF('dlg3').show()" />
+        </p:panelGrid>
+        </f:facet>
+</p:dataTable>
+
+			
+			<p:dialog header="Ajout" widgetVar="dlg3" showEffect="explode" hideEffect="bounce" >
+			<h:panelGrid>
+    <p:outputLabel value="Code Plan tarifaire" />
+    <p:inputText value="#{plan_tarif.planTarifaire.codePlanTarifaire}" ></p:inputText> 
+    <p:outputLabel value="Libelle Plan Tarifaire" />
+    <p:inputText value="#{plan_tarif.planTarifaire.planTarifaire}" ></p:inputText> 
+    <p:outputLabel value="Type" />
+    <p:inputText value="#{plan_tarif.planTarifaire.type}" ></p:inputText> 
+    <p:outputLabel value="Nom Utilisateur" />
+    <p:inputText value="#{plan_tarif.planTarifaire.nomUtilisateur}"></p:inputText> 
+  
+    <p:commandButton value="Valider" update="singleDT" actionListener="#{plan_tarif.createPlan}"  oncomplete="PF('dlg3').hide()"/>
+    <p:commandButton value="Annuler" />
+    </h:panelGrid>
+</p:dialog>
+<p:dialog header="Modification" widgetVar="dlg4" showEffect="explode" hideEffect="bounce" >
+<p:outputPanel id="planDetail" style="text-align:center;">
+			<p:panelGrid rendered="#{not empty plan_tarif.plan}" columnClasses="label,value" columns="2">
+    <p:outputLabel value="Code Plan tarifaire" />
+    <p:inputText value="#{plan_tarif.plan.codePlanTarifaire}" ></p:inputText> 
+    <p:outputLabel value="Libelle Plan Tarifaire" />
+    <p:inputText value="#{plan_tarif.plan.planTarifaire}" ></p:inputText> 
+    <p:outputLabel value="Type" />
+    <p:inputText value="#{plan_tarif.plan.type}" ></p:inputText> 
+    <p:outputLabel value="Nom Utilisateur" />
+    <p:inputText value="#{plan_tarif.plan.nomUtilisateur}"></p:inputText> 
+  
+    <p:commandButton value="Valider" update="singleDT" actionListener="#{plan_tarif.modifPlan}" oncomplete="PF('dlg4').hide()"/>
+    <p:commandButton value="Annuler" />
+    </p:panelGrid>
+    </p:outputPanel>
+</p:dialog>
+	</h:form>		
+			</ui:define>
+			</ui:composition>

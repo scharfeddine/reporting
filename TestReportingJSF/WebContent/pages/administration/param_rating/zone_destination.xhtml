@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/template.xhtml">
+           	
+			<ui:define name="pageTitle">welcome</ui:define>	
+
+			<ui:define name="PageContent">
+			<h:form id="form1">
+			<h1 style="text-align:center;"></h1>
+			
+		
+			<p:dataTable  id="singleDT"   rowKey="#{user.id}" var="user" value="#{zoneDest.liste_ZonesDestinations}" selectionMode="single" selection="#{zoneDest.zonesDestination1}" >
+    <f:facet name="header" >
+    <h:outputText value="Gestion Type Destination" />
+    </f:facet>
+    <p:column headerText="Type Destination">
+        <h:outputText value="#{user.destination.dest}" />
+    </p:column>
+ 
+    <p:column headerText="Description">
+        <h:outputText value="#{user.zone.nom}" />
+    </p:column>
+
+     <p:column headerText="Utilisateur">
+        <h:outputText value="#{user.nomUtilisateur}" />
+    </p:column>
+      
+     <p:column headerText="Date Insertion">
+        <h:outputText value="#{user.dateDebutValidite}" />
+    </p:column>
+    
+      
+   <f:facet name="footer">
+   <p:panelGrid columns="3">
+            <p:commandButton  process="singleDT"   value="Modifier" oncomplete="PF('dlg4').show()"  />
+             <p:commandButton process="singleDT" icon="ui-icon-plusthick" value="Ajouter" oncomplete="PF('dlg3').show()" />
+                     <p:commandButton process="singleDT" update="singleDT" icon="ui-icon-plusthick" value="Supprimer" actionListener="#{ZoneDest.DeleteZoneDest()}"  />
+        
+        </p:panelGrid>
+        </f:facet>
+</p:dataTable>
+
+			
+
+	</h:form>		
+			</ui:define>
+			</ui:composition>

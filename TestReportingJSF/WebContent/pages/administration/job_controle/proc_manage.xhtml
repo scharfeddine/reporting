@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/template.xhtml"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+			<ui:define name="pageTitle">welcome</ui:define>	
+
+			<ui:define name="PageContent">
+			<h:form id="form1">
+	
+				<p:dataTable var="proc" id="singleDT" paginator="true" rows="10"  value="#{proc_manage.liste_proc}"     selectionMode="single" selection="#{proc_manage.proc}"  >
+				    <f:facet name="header">
+   <p:outputLabel value="Gestion Processus"></p:outputLabel>
+        </f:facet>
+				<p:column headerText="LbProc">
+        <h:outputText value="#{proc.lbproc}" />
+    </p:column>
+				 <p:column headerText="Etat" >
+				
+				 <h:outputText value="Arrêt" rendered="#{proc.etatlance == 0}"/>
+				 
+				 
+				 <h:outputText value="Marche" rendered="#{proc.etatlance == 1}" />
+				
+				
+				 <h:outputText value="Pause" rendered="#{proc.etatlance == 2}" />
+				
+        
+    </p:column>
+     <p:column headerText="PID">
+        <h:outputText value="#{proc.pid}" />
+    </p:column>
+     <p:column headerText="Cycle">
+        <h:outputText value="#{proc.cycle}" />
+    </p:column>
+       <p:column headerText="Start">
+        <h:outputText value="#{proc.LStart}" />
+    </p:column>
+    <f:facet name="footer">
+   <p:panelGrid columns="3">
+            <p:commandButton  process="singleDT"   value="Pause"   />
+             <p:commandButton process="singleDT" icon="ui-icon-plusthick" value="Modifier Cycle"  />
+          <p:commandButton  process="singleDT" update="singleDT"  value="Activer"  />
+             
+        </p:panelGrid>
+        </f:facet>
+				
+				</p:dataTable>
+				
+				</h:form>
+				</ui:define>
+				</ui:composition>

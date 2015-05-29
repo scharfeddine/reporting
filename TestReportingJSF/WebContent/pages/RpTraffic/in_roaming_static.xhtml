@@ -1,0 +1,123 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/template/template.xhtml"
+                
+                xmlns:hf="http://highfaces.org">
+                
+                 <ui:define name="pageTitle">welcome</ui:define>	
+			
+
+			<ui:define name="PageContent">
+		<h:form  id="form1">
+		<p:layout  onToggle="$(window).trigger('resize');"  onResize="$(window).trigger('resize');">
+		<p:layoutUnit position="east" header="Menu" collapsible="true" style="height:480px;overflow:hidden;" size="200">
+		<p:panel header="Periode"  >
+		<p:panelGrid columns="1" id="PanelPeriode" >
+		<p:selectOneMenu value="#{in_roaming.choix_periode}" >
+		 <p:ajax listener="#{in_roaming.handlechange}" event="change" update="@form" process="@this"/>
+		 <f:selectItem itemLabel="" itemValue=" " />
+		<f:selectItem itemLabel="Par Jour" itemValue="Par Jour" />
+            <f:selectItem itemLabel="Par Mois" itemValue="Par Mois" />
+            <f:selectItem itemLabel="Par Heure" itemValue="Par Heure" />
+            <f:selectItem itemLabel="Par An" itemValue="Par An" />
+		
+		</p:selectOneMenu>
+		</p:panelGrid>
+		</p:panel>
+		<p:panel header="Type" >
+		<p:panelGrid columns="1" >
+		<p:selectOneMenu value="#{in_roaming.choix_Voix}" >
+		<p:ajax listener="#{in_roaming.handlechange1}" event="change" update="@form" process="@this"/>
+		<f:selectItems value="#{in_roaming.listeVoix}" var="voix" itemLabel="#{voix}" itemValue="#{voix}" />
+            
+		
+		</p:selectOneMenu>
+		</p:panelGrid>
+		</p:panel>
+	
+			<p:panel header="Type Destination">
+			<p:panelGrid columns="1" >
+		<p:selectOneMenu value="#{in_roaming.choix_typeDest}" >
+		<p:ajax listener="#{in_roaming.handlechange1}" event="change" update="@form" process="@this"/>
+		<f:selectItems value="#{in_roaming.listetypeDest}" var="type" itemLabel="#{type}" itemValue="#{type}" />
+            
+		
+		</p:selectOneMenu>
+		
+		</p:panelGrid>
+		
+		</p:panel>
+		<p:panel header="Type Destination">
+			<p:panelGrid columns="1" >
+		
+		<p:selectOneMenu value="#{in_roaming.plan}" >
+		<p:ajax listener="#{in_roaming.handlechange1}" event="change" update="@form" process="@this"/>
+		<f:selectItem itemLabel="" itemValue="" />
+		<f:selectItems value="#{in_roaming.planTarifaires}" var="type" itemLabel="#{type.planTarifaire}" itemValue="#{type.codePlanTarifaire}" />
+            
+		
+		</p:selectOneMenu>
+		</p:panelGrid>
+		</p:panel>
+		<p:commandButton value="Exécuter" id="btn"  ajax="true" update="@form"  actionListener="#{in_roaming.Valider}"></p:commandButton>
+		
+		</p:layoutUnit>
+		<p:layoutUnit styleClass="layoutUnitCenter" id="layoutUnit" position="center">
+		<p:menuButton value="Options">
+        <p:menuitem value="Creer Votre propre Rapport"  outcome="Test.jsf" icon="ui-icon-disk"/>
+        <p:menuitem value="Voir Un rapport Existant"  icon="ui-icon-arrowrefresh-1-w"/>
+        
+        
+    </p:menuButton>
+	  
+   <div class="ui-grid-row"  >
+		<div class="ui-grid-col-6"   >
+		<p:panel  rendered="#{in_roaming.chartDisplayed}">
+		<hf:chart  type="line" subTitle="#{in_roaming.subTitle}"  title="Rapport Traffic IN Roaming(Revenue)"   >
+		<hf:chartSerie   name="Revenue" value="#{in_roaming.staticListINLocal}" var="point" point="#{point[3]}"  tickLabel="#{point[0]}"></hf:chartSerie>
+		<hf:chartSerie  name="Revenue Moyenne" value="#{in_roaming.staticListINLocal}" var="point1" point="#{point1[4]}"  tickLabel="#{point1[0]}"></hf:chartSerie>
+		
+		<hf:chartAxis position="w" min="0" ></hf:chartAxis>
+		</hf:chart>
+		</p:panel>
+		</div>
+	<div class="ui-grid-col-6"   >
+		<p:panel  rendered="#{in_roaming.chartDisplayed}">
+		<hf:chart  type="pie" title="R. du Traffic par Plan Tarifaire"  subTitle="#{in_roaming.subTitle}" >
+		<hf:chartSerie value="#{in_roaming.pie2.entrySet()}" var="point" point="#{point.value}"  tickLabel="#{point.key.toString()}"></hf:chartSerie>
+		
+		
+		</hf:chart>
+	</p:panel>
+	</div>
+	</div>
+		  <div class="ui-grid-row"  >
+			
+		<p:panel  rendered="#{in_roaming.chartDisplayed}"> 
+	
+		<hf:chart  type="line" subTitle="#{in_roaming.subTitle}" title="Rapport Traffic IN Roaming(Durée)"   >
+		<hf:chartSerie name="Duree" value="#{in_roaming.staticListINLocal}" var="point" point="#{point[2]}"  tickLabel="#{point[0]}"></hf:chartSerie>
+		<hf:chartSerie  name="Duree Moyenne" value="#{in_roaming.staticListINLocal}" var="point1" point="#{point1[1]}"  tickLabel="#{point1[0]}"></hf:chartSerie>
+		<hf:chartAxis position="w" min="0" ></hf:chartAxis>
+		
+		</hf:chart>
+		
+	</p:panel>
+	
+	</div>
+		
+		</p:layoutUnit>
+		 <p:blockUI block="layoutUnit" trigger="btn">
+      Patientez<br />
+        <h:graphicImage value="/resources/img/ajaxloadingbar.gif" />
+    </p:blockUI>
+		</p:layout>
+		
+		</h:form>
+		
+		</ui:define>
+		</ui:composition>
+		

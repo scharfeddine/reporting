@@ -1,0 +1,216 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/template/template.xhtml">
+           	
+			<ui:define name="pageTitle">welcome</ui:define>	
+
+			<ui:define name="PageContent">
+		
+			<h:form id="form1">
+			<p:messages showDetail="true"/>  
+			  <h:panelGrid columns="2">
+			  <p:panel header="Template Configuration">
+      
+            <h:panelGrid columns="2" columnClasses="formColumn1,formColumn2">  
+                <h:outputText styleClass="ui-widget-header " value="Nom Template:"/>  
+                <p:inputText required="true" label="Nom Template"  
+                             value="#{lcr.template.nom_template}"/>  
+                <h:outputText styleClass="ui-widget-header " value="Operateur:    "/>  
+                <p:selectOneMenu  value="#{lcr.template.operateur}" converter="omnifaces.SelectItemsConverter">
+                 <f:selectItem itemLabel="Choisir..." itemValue="" />
+	<f:selectItems   value="#{lcr.lst_operateurs}" var="cat" itemValue="#{cat}" itemLabel="#{cat.operateur}"/>
+			</p:selectOneMenu>
+            </h:panelGrid>  
+    
+   
+        <p:panel header="Details Feuille" toggleable="true">  
+            <h:panelGrid columns="2" columnClasses="formColumn1,formColumn2">  
+                <h:outputText  value="Est ce que les tarifs et les codes Destinations &lt;br/&gt; existe sur une feuille ou Deux feuilles? " escape="false" />  
+                <p:selectOneMenu value="#{lcr.template.nbFeuilles}">
+                <p:ajax event="change" update="@form" ></p:ajax>
+                <f:selectItem itemLabel="1" itemValue="1"/>
+                <f:selectItem itemLabel="2" itemValue="2"/>
+                </p:selectOneMenu>
+                     <p:outputPanel style="width:100px;">
+                  <h:outputText styleClass="ui-widget-header h1" value="Nom du Feuille : "/> 
+                  
+                  </p:outputPanel>
+                  <p:outputPanel >
+                   <h:outputText styleClass="ui-widget-header h1" value="Type du Feuille :  " style="width:50px;"/> 
+                   <p:spacer width="50px;"></p:spacer> 
+                   <h:outputText styleClass="ui-widget-header h1" value="Lignes à ignorer : " /> 
+                   </p:outputPanel>
+                 <p:outputPanel>
+                   <p:selectOneMenu value="#{lcr.template.tarif_Feuille}" style="width:110px;" >
+                  
+                <f:selectItem itemLabel="1" itemValue="1"/>
+                <f:selectItem itemLabel="2" itemValue="2"/>
+                </p:selectOneMenu>
+                
+                  </p:outputPanel>
+                 
+               <p:outputPanel>
+                   <p:inputText value="Tarif" readonly="true"></p:inputText>
+                 
+                <p:inputText value="#{lcr.template.lignesIgnore_Tarif}"></p:inputText>
+                  </p:outputPanel>
+              
+                  <p:outputPanel rendered="#{lcr.template.nbFeuilles==2}">
+                   <p:selectOneMenu value="#{lcr.template.dest_Feuille}" style="width:110px;" >
+                <f:selectItem itemLabel="1" itemValue="1"/>
+                <f:selectItem itemLabel="2" itemValue="2"/>
+                </p:selectOneMenu>
+                
+                  </p:outputPanel>
+                 
+               <p:outputPanel  rendered="#{lcr.template.nbFeuilles==2}">
+                  <p:inputText value="Destination" readonly="true"></p:inputText>
+                 <p:spacer width="10px;"></p:spacer> 
+                <p:inputText value="#{lcr.template.lignesIgnore_Dest}"></p:inputText>
+                  </p:outputPanel>
+              
+              
+               
+            </h:panelGrid>  
+        </p:panel>  
+       
+          <p:panel header="Date Effective" toggleable="true" >  
+            <h:panelGrid columns="2" columnClasses="formColumn1,formColumn2">  
+                <h:outputText  value="La date Est inclus dans une colonne dans le fichier? " escape="false" />  
+                <p:selectOneMenu value="#{lcr.template.colDate}">
+                <p:ajax event="change" update="@form" ></p:ajax>
+                 <f:selectItem itemLabel="Choisir..." noSelectionOption="true" />
+                <f:selectItem itemLabel="Oui" itemValue="true"/>
+                <f:selectItem itemLabel="Non" itemValue="false"/>
+                </p:selectOneMenu>
+                    <h:outputText  value="La date Est inclus dans une ligne spécifique dans le fichier? " escape="false" rendered="#{lcr.template.colDate==false}" />  
+                <p:selectOneMenu value="#{lcr.template.rowDate}" rendered="#{lcr.template.colDate==false}">
+                <p:ajax event="change" update="@form" ></p:ajax>
+                  <f:selectItem itemLabel="Choisir..." noSelectionOption="true" />
+                <f:selectItem itemLabel="Oui" itemValue="true"/>
+                <f:selectItem itemLabel="Non" itemValue="false"/>
+                </p:selectOneMenu>
+          <h:outputText  value="N° Colonne " escape="false" rendered="#{lcr.template.rowDate and lcr.template.colDate==false }" />  
+           <p:spinner value="#{lcr.template.num_colDate}" rendered="#{lcr.template.rowDate and lcr.template.colDate==false }"></p:spinner>   
+             <h:outputText  value="N° Ligne " escape="false" rendered="#{lcr.template.rowDate and lcr.template.colDate==false }" />  
+           <p:spinner value="#{lcr.template.num_ligneDate}" rendered="#{lcr.template.rowDate and lcr.template.colDate==false }"></p:spinner>   
+                 
+               
+            </h:panelGrid>  
+        </p:panel>  
+  <p:panel header="Chiffre Composé" toggleable="true" >  
+            <h:panelGrid columns="2" columnClasses="formColumn1,formColumn2">  
+                <h:outputText  value="Est ce que le code Pays et le code Destination sont séparés? " escape="false" />  
+                <p:selectOneMenu value="#{lcr.template.sepPaysDest}">
+                <p:ajax event="change" update="@form" ></p:ajax>
+                  <f:selectItem itemLabel="Choisir..." noSelectionOption="true" />
+                <f:selectItem itemLabel="Oui" itemValue="true"/>
+                <f:selectItem itemLabel="Non" itemValue="false"/>
+                </p:selectOneMenu>
+                    <h:outputText  value="Est ce que le code Pays apparait une seule fois dans le debut du colonne code Destination? " escape="false" rendered="#{lcr.template.sepPaysDest==false}" />  
+                <p:selectOneMenu value="#{lcr.template.paysinDest}" rendered="#{lcr.template.sepPaysDest==false}">
+                <p:ajax event="change" update="@form" ></p:ajax>
+                 
+                <f:selectItem itemLabel="Oui" itemValue="true"/>
+                <f:selectItem itemLabel="Non" itemValue="false"/>
+                </p:selectOneMenu>
+          <h:outputText  value="Selectionner le caractère utilisé pour separer les chiffres composés " escape="false" rendered="#{lcr.template.paysinDest}" />  
+          <p:selectOneMenu value="#{lcr.template.carac_SepChiffre}" rendered="#{lcr.template.paysinDest}">
+               
+                 
+                <f:selectItem itemLabel="," itemValue=","/>
+                <f:selectItem itemLabel=";" itemValue=";"/>
+                <f:selectItem itemLabel="-" itemValue="-"/>
+                <f:selectItem itemLabel="/" itemValue="/"/>
+                </p:selectOneMenu>
+               
+            </h:panelGrid>  
+        </p:panel>  
+  </p:panel>
+  <p:panel >
+    <p:panel header="Destination Composé" toggleable="true">  
+            <h:panelGrid columns="2" columnClasses="formColumn1,formColumn2">  
+                <h:outputText  value="Est ce que le code Destination existe une seule fois? " escape="false" />  
+                <p:selectOneMenu value="#{lcr.template.destJustOne}">
+                <p:ajax event="change" update="@form" ></p:ajax>
+                 
+                <f:selectItem itemLabel="Oui" itemValue="true"/>
+                <f:selectItem itemLabel="Non" itemValue="false"/>
+                </p:selectOneMenu>
+                    <h:outputText  value="Selectionner le caractère utilisé pour separer les chiffres composés " escape="false" rendered="#{lcr.template.destJustOne==false}" />  
+          <p:selectOneMenu value="#{lcr.template.carac_SepDestCompose}" rendered="#{lcr.template.destJustOne==false}">
+             <f:selectItem itemLabel="," itemValue=","/>
+                <f:selectItem itemLabel=";" itemValue=";"/>
+                <f:selectItem itemLabel="-" itemValue="-"/>
+                <f:selectItem itemLabel="/" itemValue="/"/>
+                </p:selectOneMenu>
+                   <h:outputText  value="Est ce que le code Destination contient des separateurs de plage? " escape="false" rendered="#{lcr.template.destJustOne==false}" />  
+                <p:selectOneMenu value="#{lcr.template.plage_Separateur}" rendered="#{lcr.template.destJustOne==false}">
+                <p:ajax event="change" update="@form" ></p:ajax>
+                 
+                <f:selectItem itemLabel="Oui" itemValue="true"/>
+                <f:selectItem itemLabel="Non" itemValue="false"/>
+                </p:selectOneMenu>
+                    <h:outputText  value="Selectionner le caractère utilisé pour separer les codes destinations " escape="false" rendered="#{lcr.template.plage_Separateur and lcr.template.destJustOne==false}" />  
+          <p:selectOneMenu value="#{lcr.template.carac_SepDest}" rendered="#{lcr.template.plage_Separateur  and lcr.template.destJustOne==false}">
+             <f:selectItem itemLabel="," itemValue=","/>
+                <f:selectItem itemLabel=";" itemValue=";"/>
+                <f:selectItem itemLabel="-" itemValue="-"/>
+                <f:selectItem itemLabel="/" itemValue="/"/>
+                </p:selectOneMenu>
+               
+            </h:panelGrid>  
+        </p:panel>  
+   <p:panel header="Date/Format" toggleable="true" >  
+            <h:panelGrid columns="2" columnClasses="formColumn1,formColumn2">  
+                <h:outputText  value="Format de date Utilisé : " escape="false" />  
+                <p:selectOneMenu value="#{lcr.template.format_date}">
+                
+                   <f:selectItem itemLabel="Choisir" itemValue=" "/>
+                <f:selectItem itemLabel="jj/mm/yyyy" itemValue="jj/mm/yyyy"/>
+                <f:selectItem itemLabel="jj-mm-yyyy" itemValue="jj-mm-yyyy"/>
+                </p:selectOneMenu>
+                 <h:outputText  value="Format de Tarif Utilisé : " escape="false" />  
+                <p:selectOneMenu value="#{lcr.template.format_tarif}">
+              
+                   <f:selectItem itemLabel="Choisir" itemValue=" "/>
+                <f:selectItem itemLabel="Americain" itemValue="Americain"/>
+                <f:selectItem itemLabel="Europien" itemValue="Europien"/>
+                </p:selectOneMenu>
+                
+                
+                </h:panelGrid>
+</p:panel>
+  <p:panel header="Mappage de colonnes" toggleable="true">  
+                  <h:outputText  value="Entrer les numéros qui correspondent aux informations suivantes  : " escape="false" />  
+  
+            <h:panelGrid columns="2" columnClasses="formColumn1,formColumn2">  
+                 
+                              
+                     <h:outputText  value="Destination  : " escape="false" />  
+                  <p:inputText value="#{lcr.template.destColRow}"></p:inputText>
+                     <h:outputText  value=" Code Destination  : " escape="false" />  
+                  <p:inputText value="#{lcr.template.codeDestColRow}"></p:inputText>
+                     <h:outputText  value="Code Pays  : " escape="false" />  
+                  <p:inputText value="#{lcr.template.codePaysColRow}"></p:inputText>
+                     <h:outputText  value="Date effective  : " escape="false" />  
+                  <p:inputText value="#{lcr.template.dateEffColRow}"></p:inputText>
+                     <h:outputText  value="Tarif  : " escape="false" />  
+                  <p:inputText value="#{lcr.template.tarifColRow}"></p:inputText>
+                       <h:outputText  value="Qualité  : " escape="false" />  
+                  <p:inputText value="#{lcr.template.qualityColRow}"></p:inputText>
+                  </h:panelGrid>
+</p:panel>
+  
+  </p:panel>
+  
+  </h:panelGrid>
+	<p:commandButton value="Sauvegarder Template"  action="#{lcr.saveTemplate}"></p:commandButton>
+
+			</h:form>
+			</ui:define>
+			</ui:composition>

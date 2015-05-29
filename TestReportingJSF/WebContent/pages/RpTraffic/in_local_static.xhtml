@@ -1,0 +1,116 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/template.xhtml"
+                
+                xmlns:hf="http://highfaces.org">
+                
+                 <ui:define name="pageTitle">welcome</ui:define>	
+			
+
+			<ui:define name="PageContent">
+		<h:form  id="form1">
+		<p:layout  onToggle="$(window).trigger('resize');"  onResize="$(window).trigger('resize');">
+		<p:layoutUnit position="east" header="Menu" style="height:480px;overflow:hidden;" size="200">
+		<p:panel header="Periode"  >
+		<p:panelGrid columns="1" id="PanelPeriode" >
+		<p:selectOneMenu value="#{in_local.choix_periode}" >
+		 <p:ajax listener="#{in_local.handlechange}" event="change" update="@form" process="@this"/>
+		 <f:selectItem itemLabel="" itemValue=" " />
+		<f:selectItem itemLabel="Par Jour" itemValue="Par Jour" />
+            <f:selectItem itemLabel="Par Mois" itemValue="Par Mois" />
+            <f:selectItem itemLabel="Par Heure" itemValue="Par Heure" />
+            <f:selectItem itemLabel="Par An" itemValue="Par An" />
+		
+		</p:selectOneMenu>
+		</p:panelGrid>
+		</p:panel>
+		<p:panel header="Type" >
+		<p:panelGrid columns="1" >
+		<p:selectOneMenu value="#{in_local.choix_Voix}" >
+		<p:ajax listener="#{in_local.handlechange1}" event="change" update="@form" process="@this"/>
+		<f:selectItems value="#{in_local.listeVoix}" var="voix" itemLabel="#{voix}" itemValue="#{voix}" />
+            
+		
+		</p:selectOneMenu>
+		</p:panelGrid>
+		</p:panel>
+	
+			<p:panel header="Type Destination">
+			<p:panelGrid columns="1" >
+		<p:selectOneMenu value="#{in_local.choix_typeDest}" >
+		<p:ajax listener="#{in_local.handlechange1}" event="change" update="@form" process="@this"/>
+		<f:selectItems value="#{in_local.listetypeDest}" var="type" itemLabel="#{type}" itemValue="#{type}" />
+            
+		
+		</p:selectOneMenu>
+		
+		</p:panelGrid>
+		
+		</p:panel>
+		<p:panel header="Plan Tarifaire">
+			<p:panelGrid columns="1" >
+		
+		<p:selectOneMenu value="#{in_local.plan}" >
+		<p:ajax listener="#{in_local.handlechange1}" event="change" update="@form" process="@this"/>
+		<f:selectItem itemLabel="" itemValue="" />
+		<f:selectItems value="#{in_local.planTarifaires}" var="type" itemLabel="#{type.planTarifaire}" itemValue="#{type.codePlanTarifaire}" />
+            
+		
+		</p:selectOneMenu>
+		</p:panelGrid>
+		</p:panel>
+		<p:commandButton value="Exécuter" id="btn"  ajax="true" update="@form"  actionListener="#{in_local.Valider}"></p:commandButton>
+		
+		</p:layoutUnit>
+		<p:layoutUnit styleClass="layoutUnitCenter" id="layoutUnit" position="center">
+		<p:menuButton value="Options">
+        <p:menuitem value="Creer Votre propre Rapport"  outcome="Test.jsf" icon="ui-icon-disk"/>
+        <p:menuitem value="Voir Un rapport Existant"  icon="ui-icon-arrowrefresh-1-w"/>
+        
+        
+    </p:menuButton>
+		<p:panelGrid id="ColLineChart" columns="2" rendered="#{in_local.chartDisplayed}">
+		<hf:chart width="570px" type="line" subTitle="#{in_local.subTitle}"  title="Rapport Traffic IN Local(Duree)"   >
+		<hf:chartSerie   name="Duree Moy" value="#{in_local.staticListINLocal}" var="point" point="#{point[1]}"  tickLabel="#{point[0]}"></hf:chartSerie>
+		<hf:chartSerie  name="Duree" value="#{in_local.staticListINLocal}" var="point1" point="#{point1[2]}"  tickLabel="#{point1[0]}"></hf:chartSerie>
+		
+		<hf:chartAxis position="w" min="0" ></hf:chartAxis>
+		</hf:chart>
+		<hf:chart width="300px" type="pie" title="Repartition par Plan Tarifaire"  subTitle="#{in_local.subTitle}" >
+		<hf:chartSerie value="#{in_local.pie2.entrySet()}" var="point" point="#{point.value}"  tickLabel="#{point.key.toString()}"></hf:chartSerie>
+		
+		
+		</hf:chart>
+	
+		</p:panelGrid>
+		
+			<p:panelGrid columns="2" id="ColLineChart1" rendered="#{in_local.chartDisplayed}">
+	
+		<hf:chart width="570px" type="line" subTitle="#{in_local.subTitle}" title="Rapport Traffic IN Local(Revenue)"   >
+		<hf:chartSerie name="Revenue Moy" value="#{in_local.staticListINLocal}" var="point" point="#{point[4]}"  tickLabel="#{point[0]}"></hf:chartSerie>
+		<hf:chartSerie  name="Revenue" value="#{in_local.staticListINLocal}" var="point1" point="#{point1[3]}"  tickLabel="#{point1[0]}"></hf:chartSerie>
+		
+		<hf:chartAxis position="w" min="0" ></hf:chartAxis>
+		</hf:chart>
+			<hf:chart  width="300px" type="pie" title="Repartition par Destination"  subTitle="#{in_local.subTitle}" >
+		<hf:chartSerie value="#{in_local.pie1.entrySet()}" var="point" point="#{point.value}"  tickLabel="#{point.key.toString()}"></hf:chartSerie>
+		
+		
+		</hf:chart>
+		</p:panelGrid>
+		
+		</p:layoutUnit>
+		 <p:blockUI block="layoutUnit" trigger="btn">
+      Patientez<br />
+        <h:graphicImage value="/resources/img/ajaxloadingbar.gif" />
+    </p:blockUI>
+		</p:layout>
+		
+		</h:form>
+		
+		</ui:define>
+		</ui:composition>
+		

@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/template.xhtml">
+           	
+			<ui:define name="pageTitle">welcome</ui:define>	
+
+			<ui:define name="PageContent">
+			<h:form id="form1">
+	
+				<p:dataTable var="dest" id="singleDT" paginator="true" rows="10" value="#{dest_manage.liste_destination}"  rowKey="#{dest.id}"   selectionMode="single" selection="#{dest_manage.destination1}"  >
+				    <f:facet name="header">
+   <p:outputLabel value="Gestion Destination"></p:outputLabel>
+        </f:facet>
+				<p:column headerText="Destination">
+        <h:outputText value="#{dest.dest}" />
+    </p:column>
+				 <p:column headerText="Type Destination">
+        <h:outputText value="#{dest.destination.typeDest}" />
+    </p:column>
+     <p:column headerText="Date Debut">
+        <h:outputText value="#{dest.dateDebut}" />
+    </p:column>
+     <p:column headerText="Date Fin">
+        <h:outputText value="#{account.typeAccount}" />
+    </p:column>
+       <p:column headerText="Utilisateur">
+        <h:outputText value="#{dest.nomUtilisateur}" />
+    </p:column>
+     <p:column headerText="Date Insertion">
+        <h:outputText value="#{dest.dateModif}" />
+    </p:column>
+    <f:facet name="footer">
+   <p:panelGrid columns="3">
+            <p:commandButton  process="singleDT"  value="Modifier" oncomplete="PF('dlg4').show()"  />
+             <p:commandButton process="singleDT" icon="ui-icon-plusthick" value="Ajouter" oncomplete="PF('dlg3').show()" />
+          <p:commandButton  process="singleDT" update="singleDT"  value="Supprimer" actionListener="#{account_in.supprimer_account()}"  />
+             
+        </p:panelGrid>
+        </f:facet>
+				
+				</p:dataTable>
+  <p:dialog header="Ajout" widgetVar="dlg3" showEffect="explode" hideEffect="bounce" >
+			<h:panelGrid>
+			
+    <p:outputLabel value="Destination" />
+     <p:inputText value="#{dest_manage.destination.dest}"  >
+     
+     </p:inputText>
+   
+
+    <p:outputLabel value="Type Destination" />
+   <p:selectOneMenu value="#{dest_manage.destination.destination}" converter="omnifaces.SelectItemsConverter"    >
+   <f:selectItem itemLabel="Choisir..." itemValue="" />
+	  <f:selectItems value="#{dest_manage.liste_typeDest}" var="type" itemLabel="#{type.typeDest}" itemValue="#{type}" />
+	   
+	      
+	</p:selectOneMenu>
+
+   
+	  <p:commandButton value="Details"    oncomplete="PF('dlg5').show()" />
+    <p:commandButton value="Valider" update="singleDT" actionListener="#{account_in.createAccountIn()}"  oncomplete="PF('dlg3').hide()"/>
+    <p:commandButton value="Annuler" onclick="PF('dlg3').hide()" />
+    </h:panelGrid>
+    
+       
+</p:dialog>
+
+<p:dialog header="Details" widgetVar="dlg5" showEffect="explode" hideEffect="bounce" >
+<p:outputPanel id="CodeDetails" style="text-align:center;">
+			<p:panelGrid columnClasses="label,value" columns="2">
+    
+    <p:outputLabel value="Code Destination" />
+  <p:inputText  value="#{dest_manage.detail.codeDest}"   />
+ 
+    <p:outputLabel value="Date Debut  " />
+    <p:calendar value="#{dest_manage.detail.dateDebut}" /> 
+     
+     <p:outputLabel value="Date Fin " />
+    <p:calendar value="#{dest_manage.detail.dateFin}" /> 
+    </p:panelGrid>
+    <p:dataTable id="DetTable" value="#{dest_manage.listeDetails}" rowKey="#{det.id}" var="det" selectionMode="single" selection="#{dest_manage.detail}">
+    <p:column headerText="Code Destination">
+        <h:outputText value="#{det.codeDest}" />
+    </p:column>
+     <p:column headerText="Date Debut">
+        <h:outputText value="#{det.dateDebut}" />
+    </p:column>
+    <p:column headerText="Date Fin">
+        <h:outputText value="#{det.dateFin}" />
+    </p:column>
+    
+    <f:facet name="footer">
+   <p:panelGrid columns="3">
+            <p:commandButton  process="DetTable"  value="Modifier"   />
+             <p:commandButton process="DetTable" update="DetTable" icon="ui-icon-plusthick" value="Ajouter" actionListener="#{dest_manage.setDetailList()}" />
+          <p:commandButton  process="DetTable" update="DetTable"  value="Supprimer"  />
+             
+        </p:panelGrid>
+        </f:facet>
+    </p:dataTable>
+    
+    <p:commandButton value="Valider" update="singleDT" actionListener="#{dest_manage.addDestination()}"  oncomplete="PF('dlg5').hide()"/>
+    <p:commandButton value="Annuler"  onclick="PF('dlg5').hide()"/>
+    
+    </p:outputPanel>
+</p:dialog>
+	</h:form>		
+</ui:define>
+</ui:composition>
